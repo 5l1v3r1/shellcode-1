@@ -1,8 +1,9 @@
 This doc is about how to make the shell code. 
 The test environment is Ubuntu 12.04 with Linux 3.11.
 
-Contact: Dongli Zhang
-Email: dongli.zhang0129@gmail.com
+Contact: Harrys Kon
+Email: konharrys@gmail.com
+https://harryskon.com/
 
 1. exec /bin/sh with shellcode
 (1) Compile the shellcode source: gcc shell_exec.c -o shell_exec
