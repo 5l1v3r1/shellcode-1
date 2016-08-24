@@ -1,9 +1,8 @@
-Shellcode in Linux.
+lShellcode in Linux.
 The test environment is Linux lubuntu 4.4.0-34-generic #53-Ubuntu SMP Wed Jul 27 16:06:28 UTC 2016 i686 i686 i686 GNU/Linux.
 
 Contact: Harrys Kon
-Email: konharrys@gmail.com
-https://harryskon.com/
+Email: konharrys at gmail dot com
 
 exec /bin/sh with shellcode
 ------------------------------

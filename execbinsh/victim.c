@@ -1,7 +1,6 @@
 /*
 Contact: Harrys Kon
-Email: konharrys@gmail.com
-https://harryskon.com/
+Email: konharrys at gmail dot com
 */
 
 #include <stdio.h>

@@ -1,7 +1,6 @@
 /*
 Contact: Harrys Kon
-Email: konharrys@gmail.com
-https://harryskon.com/
+Email: konharrys at gmail dot com
 
 movb $0xb, %al     ;Number of the execve(2) syscall
 int 0x80           ;Execute the syscall
